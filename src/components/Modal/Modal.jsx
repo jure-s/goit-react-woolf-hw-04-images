@@ -1,19 +1,13 @@
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { Overlay, StyledModal } from './Modal.styled';
 
-const portalRef = document.getElementById('portal');
-
 const Modal = ({ imgSrc, label, closeModal }) => {
-  const onOverlayClick = e => {
-    if (e.target === e.currentTarget) {
-      closeModal();
-    }
-  };
+  const portalElement = document.body;
 
   useEffect(() => {
-    const onEscButtonClose = e => {
+    const onEscButtonClose = (e) => {
       if (e.code === 'Escape') {
         closeModal();
       }
@@ -26,20 +20,26 @@ const Modal = ({ imgSrc, label, closeModal }) => {
     };
   }, [closeModal]);
 
+  const onOverlayClick = (e) => {
+    if (e.target === e.currentTarget) {
+      closeModal();
+    }
+  };
+
   return createPortal(
     <Overlay onClick={onOverlayClick}>
       <StyledModal>
         <img src={imgSrc} alt={label} />
       </StyledModal>
     </Overlay>,
-    portalRef
+    portalElement
   );
 };
-
-export default Modal;
 
 Modal.propTypes = {
   imgSrc: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   closeModal: PropTypes.func.isRequired,
 };
+
+export default Modal;
